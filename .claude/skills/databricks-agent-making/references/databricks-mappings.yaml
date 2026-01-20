@@ -1,0 +1,633 @@
+# Databricks Capability Detection Mappings
+# Maps detected Databricks platform capabilities to agent types and configurations
+
+detection_sources:
+  config_files:
+    - databricks.yml
+    - bundle.yml
+    - databricks.yaml
+    - cluster.json
+    - job.json
+    - pipeline.json
+
+  planning_docs:
+    - PRD.md
+    - roadmap.md
+    - brainstorm.md
+    - README.md
+    - PLAN.md
+    - architecture.md
+    - data-architecture.md
+
+  code_files:
+    python:
+      - "*.py"
+      - "*.ipynb"
+    sql:
+      - "*.sql"
+    scala:
+      - "*.scala"
+    r:
+      - "*.r"
+      - "*.R"
+
+  notebook_directories:
+    - notebooks/
+    - src/
+    - pipelines/
+    - jobs/
+    - models/
+    - features/
+    - dags/
+    - workflows/
+
+# Databricks capability patterns for detection
+capabilities:
+
+  data_engineering:
+    spark_developer:
+      patterns:
+        - "from pyspark"
+        - "from pyspark.sql"
+        - "SparkSession"
+        - "spark.read"
+        - "spark.write"
+        - "spark.createDataFrame"
+        - "import org.apache.spark"
+      keywords:
+        - "Spark"
+        - "PySpark"
+        - "DataFrame"
+        - "RDD"
+        - "SparkContext"
+        - "spark job"
+        - "spark cluster"
+      file_patterns:
+        - "*.py"
+        - "*.scala"
+        - "notebooks/*.py"
+      agent: spark-developer
+      model: sonnet
+      color: "#E25A1C"
+      description: "Apache Spark/PySpark development and optimization"
+
+    delta_lake_engineer:
+      patterns:
+        - "from delta"
+        - "from delta.tables"
+        - "DeltaTable"
+        - "MERGE INTO"
+        - "delta.`"
+        - "format('delta')"
+        - "OPTIMIZE"
+        - "VACUUM"
+        - "DESCRIBE HISTORY"
+        - "RESTORE"
+        - "TIME TRAVEL"
+      keywords:
+        - "Delta Lake"
+        - "Delta table"
+        - "lakehouse"
+        - "ACID"
+        - "time travel"
+        - "Z-ORDER"
+        - "data skipping"
+        - "change data feed"
+      file_patterns:
+        - "*.py"
+        - "*.sql"
+        - "delta/*.py"
+      agent: delta-lake-engineer
+      model: sonnet
+      color: "#00ADD8"
+      description: "Delta Lake table design, optimization, and management"
+
+    etl_pipeline_architect:
+      patterns:
+        - "import dlt"
+        - "@dlt.table"
+        - "@dlt.view"
+        - "dlt.read"
+        - "dlt.expect"
+        - "CONSTRAINT"
+        - "CREATE STREAMING"
+        - "APPLY CHANGES INTO"
+        - "CREATE LIVE TABLE"
+        - "CREATE STREAMING LIVE TABLE"
+      keywords:
+        - "Delta Live Tables"
+        - "DLT"
+        - "ETL"
+        - "ELT"
+        - "pipeline"
+        - "medallion"
+        - "bronze"
+        - "silver"
+        - "gold"
+        - "data quality"
+        - "expectations"
+      file_patterns:
+        - "pipelines/*.py"
+        - "dlt/*.py"
+        - "etl/*.py"
+      agent: etl-pipeline-architect
+      model: sonnet
+      color: "#7B68EE"
+      description: "Delta Live Tables and ETL/ELT pipeline design"
+
+    sql_analyst:
+      patterns:
+        - "spark.sql"
+        - "%sql"
+        - "CREATE TABLE"
+        - "CREATE VIEW"
+        - "SELECT"
+        - "WITH"
+        - "CREATE SCHEMA"
+        - "SHOW TABLES"
+        - "DESCRIBE TABLE"
+        - "EXPLAIN"
+      keywords:
+        - "Databricks SQL"
+        - "DBSQL"
+        - "SQL warehouse"
+        - "SQL endpoint"
+        - "dashboard"
+        - "visualization"
+        - "query"
+        - "analytics"
+      file_patterns:
+        - "*.sql"
+        - "queries/*.sql"
+        - "sql/*.sql"
+      agent: sql-analyst
+      model: sonnet
+      color: "#336791"
+      description: "Databricks SQL analytics, queries, and dashboards"
+
+  machine_learning:
+    mlflow_engineer:
+      patterns:
+        - "import mlflow"
+        - "mlflow.log_metric"
+        - "mlflow.log_param"
+        - "mlflow.log_artifact"
+        - "mlflow.start_run"
+        - "mlflow.pyfunc"
+        - "mlflow.sklearn"
+        - "mlflow.pytorch"
+        - "mlflow.spark"
+        - "MlflowClient"
+        - "mlflow.register_model"
+      keywords:
+        - "MLflow"
+        - "experiment"
+        - "run"
+        - "model registry"
+        - "artifact"
+        - "tracking"
+        - "model versioning"
+        - "model serving"
+      file_patterns:
+        - "*.py"
+        - "models/*.py"
+        - "experiments/*.py"
+        - "mlruns/"
+      agent: mlflow-engineer
+      model: sonnet
+      color: "#0194E2"
+      description: "MLflow experiment tracking, model registry, and deployment"
+
+    feature_store_engineer:
+      patterns:
+        - "FeatureStoreClient"
+        - "FeatureLookup"
+        - "feature_store"
+        - "create_table"
+        - "write_table"
+        - "read_table"
+        - "get_table"
+        - "create_training_set"
+        - "from databricks.feature_store"
+        - "from databricks.feature_engineering"
+      keywords:
+        - "Feature Store"
+        - "feature table"
+        - "feature engineering"
+        - "feature lookup"
+        - "training set"
+        - "online store"
+        - "feature serving"
+      file_patterns:
+        - "features/*.py"
+        - "feature_store/*.py"
+        - "*.py"
+      agent: feature-store-engineer
+      model: sonnet
+      color: "#FF6B6B"
+      description: "Feature engineering, Feature Store management, and serving"
+
+    ml_model_developer:
+      patterns:
+        - "from sklearn"
+        - "from xgboost"
+        - "from lightgbm"
+        - "import torch"
+        - "import tensorflow"
+        - "from transformers"
+        - "AutoML"
+        - "databricks.automl"
+        - "model.fit"
+        - "model.predict"
+        - "mlflow.pyfunc.load_model"
+        - "served_models"
+      keywords:
+        - "machine learning"
+        - "deep learning"
+        - "AutoML"
+        - "model training"
+        - "model deployment"
+        - "inference"
+        - "prediction"
+        - "model serving"
+        - "Mosaic AI"
+      file_patterns:
+        - "models/*.py"
+        - "training/*.py"
+        - "inference/*.py"
+        - "*.py"
+      agent: ml-model-developer
+      model: sonnet
+      color: "#9B59B6"
+      description: "ML model development, training, and deployment"
+
+  platform_governance:
+    unity_catalog_admin:
+      patterns:
+        - "USE CATALOG"
+        - "CREATE CATALOG"
+        - "CREATE SCHEMA"
+        - "CREATE VOLUME"
+        - "GRANT"
+        - "REVOKE"
+        - "ALTER"
+        - "SHOW CATALOGS"
+        - "SHOW SCHEMAS"
+        - "catalog.schema.table"
+        - "unity_catalog"
+        - "from databricks.sdk"
+      keywords:
+        - "Unity Catalog"
+        - "catalog"
+        - "schema"
+        - "volume"
+        - "governance"
+        - "data lineage"
+        - "access control"
+        - "metastore"
+        - "external location"
+        - "storage credential"
+      file_patterns:
+        - "*.sql"
+        - "governance/*.sql"
+        - "catalog/*.sql"
+        - "databricks.yml"
+      agent: unity-catalog-admin
+      model: sonnet
+      color: "#1E88E5"
+      description: "Unity Catalog governance, access control, and data management"
+
+    workspace_admin:
+      patterns:
+        - "dbutils"
+        - "dbutils.notebook"
+        - "dbutils.widgets"
+        - "dbutils.fs"
+        - "dbutils.secrets"
+        - "spark.conf.set"
+        - "spark.conf.get"
+        - "cluster_id"
+        - "workspace"
+        - "from databricks.sdk"
+        - "WorkspaceClient"
+      keywords:
+        - "workspace"
+        - "cluster"
+        - "job"
+        - "notebook"
+        - "dbutils"
+        - "widget"
+        - "configuration"
+        - "init script"
+        - "pool"
+        - "runtime"
+      file_patterns:
+        - "*.py"
+        - "databricks.yml"
+        - "bundle.yml"
+        - "jobs/*.json"
+        - "clusters/*.json"
+      agent: workspace-admin
+      model: sonnet
+      color: "#FF9800"
+      description: "Workspace management, clusters, jobs, and administration"
+
+    security_engineer:
+      patterns:
+        - "dbutils.secrets"
+        - "get_secret"
+        - "create_scope"
+        - "put_secret"
+        - "GRANT"
+        - "REVOKE"
+        - "DENY"
+        - "permissions"
+        - "access_control"
+        - "service_principal"
+        - "token"
+        - "pat"
+      keywords:
+        - "secrets"
+        - "security"
+        - "permissions"
+        - "access control"
+        - "authentication"
+        - "authorization"
+        - "service principal"
+        - "token"
+        - "encryption"
+        - "audit"
+        - "compliance"
+      file_patterns:
+        - "*.py"
+        - "*.sql"
+        - "security/*.py"
+        - "databricks.yml"
+      agent: security-engineer
+      model: sonnet
+      color: "#F44336"
+      description: "Security, secrets management, access control, and compliance"
+
+  data_integration:
+    data_connector_specialist:
+      patterns:
+        - "jdbc"
+        - "odbc"
+        - "format('jdbc')"
+        - "format('csv')"
+        - "format('parquet')"
+        - "format('json')"
+        - "format('avro')"
+        - "load"
+        - "save"
+        - "external_location"
+        - "COPY INTO"
+        - "Auto Loader"
+        - "cloudFiles"
+      keywords:
+        - "connector"
+        - "data source"
+        - "external"
+        - "JDBC"
+        - "ODBC"
+        - "Fivetran"
+        - "Airbyte"
+        - "dbt"
+        - "Partner Connect"
+        - "Auto Loader"
+        - "cloud files"
+      file_patterns:
+        - "*.py"
+        - "connectors/*.py"
+        - "sources/*.py"
+        - "ingestion/*.py"
+      agent: data-connector-specialist
+      model: sonnet
+      color: "#4CAF50"
+      description: "External data sources, connectors, and data ingestion"
+
+    streaming_engineer:
+      patterns:
+        - "readStream"
+        - "writeStream"
+        - "StreamingQuery"
+        - "trigger"
+        - "watermark"
+        - "outputMode"
+        - "format('kafka')"
+        - "kafka.bootstrap.servers"
+        - "from_kafka"
+        - "to_kafka"
+        - "eventhubs"
+        - "kinesis"
+        - "foreachBatch"
+        - "checkpoint"
+      keywords:
+        - "streaming"
+        - "Structured Streaming"
+        - "Kafka"
+        - "Event Hubs"
+        - "Kinesis"
+        - "real-time"
+        - "micro-batch"
+        - "continuous"
+        - "watermark"
+        - "checkpoint"
+        - "exactly-once"
+      file_patterns:
+        - "*.py"
+        - "streaming/*.py"
+        - "pipelines/*.py"
+      agent: streaming-engineer
+      model: sonnet
+      color: "#00BCD4"
+      description: "Structured Streaming, Kafka, and real-time data processing"
+
+  # Bespoke capabilities (use generic template with enrichment)
+  bespoke:
+    photon:
+      patterns:
+        - "photon"
+        - "spark.databricks.photon"
+      keywords:
+        - "Photon"
+        - "vectorized"
+        - "native"
+        - "acceleration"
+      agent: photon-specialist
+      model: haiku
+      color: "#FF5722"
+      template: generic
+      description: "Photon engine optimization and configuration"
+
+    serverless:
+      patterns:
+        - "serverless"
+        - "warehouse_type"
+      keywords:
+        - "serverless"
+        - "serverless compute"
+        - "serverless SQL"
+      agent: serverless-specialist
+      model: haiku
+      color: "#9E9E9E"
+      template: generic
+      description: "Serverless compute configuration and optimization"
+
+    dbt_integration:
+      patterns:
+        - "dbt"
+        - "dbt run"
+        - "dbt test"
+      keywords:
+        - "dbt"
+        - "data build tool"
+        - "transformation"
+      agent: dbt-specialist
+      model: sonnet
+      color: "#FF694B"
+      template: generic
+      description: "dbt integration and data transformation"
+
+    vector_search:
+      patterns:
+        - "VectorSearch"
+        - "vector_search"
+        - "create_index"
+        - "similarity_search"
+      keywords:
+        - "Vector Search"
+        - "embeddings"
+        - "similarity"
+        - "RAG"
+        - "semantic search"
+      agent: vector-search-specialist
+      model: sonnet
+      color: "#673AB7"
+      template: generic
+      description: "Mosaic AI Vector Search and embeddings"
+
+    mosaic_ai:
+      patterns:
+        - "MosaicML"
+        - "ai_query"
+        - "ai_generate"
+        - "ai_classify"
+      keywords:
+        - "Mosaic AI"
+        - "AI Functions"
+        - "GenAI"
+        - "LLM"
+        - "foundation models"
+      agent: mosaic-ai-specialist
+      model: sonnet
+      color: "#E91E63"
+      template: generic
+      description: "Mosaic AI, AI Functions, and foundation models"
+
+# Core agents (always generated for Databricks projects)
+core_agents:
+  orchestrator:
+    model: opus
+    color: "#9C27B0"
+    description: "Multi-agent coordination for Databricks workflows"
+
+  project-manager:
+    model: sonnet
+    color: "#2196F3"
+    description: "Data project planning, documentation, and tracking"
+
+  qa-engineer:
+    model: haiku
+    color: "#4CAF50"
+    description: "Data quality validation and pipeline review"
+
+  troubleshooter:
+    model: sonnet
+    color: "#F44336"
+    description: "Databricks debugging and issue resolution"
+
+  testing-agent:
+    model: haiku
+    color: "#FF9800"
+    description: "Pipeline testing and notebook validation"
+
+# Inferred file ownership patterns
+ownership_inference:
+  spark-developer:
+    - "src/**/*.py"
+    - "notebooks/**/*.py"
+    - "jobs/**/*.py"
+
+  delta-lake-engineer:
+    - "delta/**/*"
+    - "tables/**/*"
+    - "*.sql"
+
+  etl-pipeline-architect:
+    - "pipelines/**/*"
+    - "dlt/**/*"
+    - "etl/**/*"
+
+  sql-analyst:
+    - "queries/**/*.sql"
+    - "sql/**/*.sql"
+    - "dashboards/**/*"
+
+  mlflow-engineer:
+    - "models/**/*"
+    - "experiments/**/*"
+    - "mlruns/**/*"
+    - "mlflow/**/*"
+
+  feature-store-engineer:
+    - "features/**/*"
+    - "feature_store/**/*"
+
+  ml-model-developer:
+    - "training/**/*"
+    - "inference/**/*"
+    - "serving/**/*"
+
+  unity-catalog-admin:
+    - "catalog/**/*"
+    - "governance/**/*"
+    - "databricks.yml"
+
+  workspace-admin:
+    - "clusters/**/*"
+    - "jobs/**/*"
+    - "workflows/**/*"
+    - "databricks.yml"
+    - "bundle.yml"
+
+  security-engineer:
+    - "security/**/*"
+    - "permissions/**/*"
+
+  data-connector-specialist:
+    - "connectors/**/*"
+    - "sources/**/*"
+    - "ingestion/**/*"
+
+  streaming-engineer:
+    - "streaming/**/*"
+    - "realtime/**/*"
+
+# Official Databricks documentation URLs for Tier 3 scraping
+docs_urls:
+  spark: "https://docs.databricks.com/en/spark/index.html"
+  delta_lake: "https://docs.databricks.com/en/delta/index.html"
+  delta_live_tables: "https://docs.databricks.com/en/delta-live-tables/index.html"
+  databricks_sql: "https://docs.databricks.com/en/sql/index.html"
+  mlflow: "https://docs.databricks.com/en/mlflow/index.html"
+  feature_store: "https://docs.databricks.com/en/machine-learning/feature-store/index.html"
+  automl: "https://docs.databricks.com/en/machine-learning/automl/index.html"
+  unity_catalog: "https://docs.databricks.com/en/data-governance/unity-catalog/index.html"
+  clusters: "https://docs.databricks.com/en/clusters/index.html"
+  jobs: "https://docs.databricks.com/en/jobs/index.html"
+  secrets: "https://docs.databricks.com/en/security/secrets/index.html"
+  structured_streaming: "https://docs.databricks.com/en/structured-streaming/index.html"
+  auto_loader: "https://docs.databricks.com/en/ingestion/auto-loader/index.html"
+  vector_search: "https://docs.databricks.com/en/generative-ai/vector-search.html"
+  mosaic_ai: "https://docs.databricks.com/en/generative-ai/index.html"

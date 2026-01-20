@@ -1,0 +1,194 @@
+# MCP Server Catalog
+# Maps detected technologies to MCP server configurations
+
+mcp_servers:
+  # Language Servers
+  typescript:
+    name: "typescript-language-server"
+    command: "npx"
+    args: ["typescript-language-server", "--stdio"]
+    triggers:
+      - typescript
+      - "@types/node"
+      - "tsconfig.json"
+    category: language
+
+  python:
+    name: "pyright"
+    command: "npx"
+    args: ["pyright-langserver", "--stdio"]
+    triggers:
+      - python
+      - pyproject.toml
+      - requirements.txt
+    category: language
+
+  # Database Servers
+  postgres:
+    name: "@modelcontextprotocol/server-postgres"
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-postgres"]
+    env:
+      POSTGRES_CONNECTION_STRING: "${POSTGRES_URL}"
+    triggers:
+      - pg
+      - psycopg2
+      - asyncpg
+      - postgres
+    category: database
+
+  mongodb:
+    name: "mongodb-mcp"
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-mongodb"]
+    env:
+      MONGODB_URI: "${MONGODB_URL}"
+    triggers:
+      - mongoose
+      - mongodb
+      - pymongo
+    category: database
+
+  sqlite:
+    name: "@modelcontextprotocol/server-sqlite"
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-sqlite", "--db-path", "${SQLITE_PATH}"]
+    triggers:
+      - sqlite3
+      - better-sqlite3
+    category: database
+
+  redis:
+    name: "redis-mcp"
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-redis"]
+    env:
+      REDIS_URL: "${REDIS_URL}"
+    triggers:
+      - redis
+      - ioredis
+    category: database
+
+  # Development Tools
+  github:
+    name: "@modelcontextprotocol/server-github"
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-github"]
+    env:
+      GITHUB_PERSONAL_ACCESS_TOKEN: "${GITHUB_TOKEN}"
+    triggers:
+      - .github
+      - github
+    category: devops
+
+  playwright:
+    name: "playwright-mcp"
+    command: "npx"
+    args: ["-y", "@anthropic/mcp-server-playwright"]
+    triggers:
+      - playwright
+      - "@playwright/test"
+    category: testing
+
+  puppeteer:
+    name: "@anthropic/mcp-server-puppeteer"
+    command: "npx"
+    args: ["-y", "@anthropic/mcp-server-puppeteer"]
+    triggers:
+      - puppeteer
+    category: testing
+
+  # File System & Search
+  filesystem:
+    name: "@modelcontextprotocol/server-filesystem"
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-filesystem", "${PROJECT_ROOT}"]
+    triggers: []
+    category: core
+    always_include: true
+
+  memory:
+    name: "@modelcontextprotocol/server-memory"
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-memory"]
+    triggers: []
+    category: core
+    always_include: false
+
+  # Cloud & Infrastructure
+  aws:
+    name: "aws-mcp"
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-aws"]
+    env:
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      AWS_REGION: "${AWS_REGION}"
+    triggers:
+      - aws-sdk
+      - boto3
+      - "@aws-sdk"
+    category: cloud
+
+  vercel:
+    name: "vercel-mcp"
+    command: "npx"
+    args: ["-y", "@vercel/mcp-server"]
+    env:
+      VERCEL_TOKEN: "${VERCEL_TOKEN}"
+    triggers:
+      - vercel
+      - next
+    category: cloud
+
+  # API & Documentation
+  fetch:
+    name: "@modelcontextprotocol/server-fetch"
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-fetch"]
+    triggers: []
+    category: utility
+    always_include: true
+
+  # Context & Documentation
+  context7:
+    name: "context7"
+    command: "npx"
+    args: ["-y", "@context7/mcp-server"]
+    triggers: []
+    category: documentation
+    always_include: true
+
+# Server categories for grouping
+categories:
+  language:
+    description: "Language servers for code intelligence"
+    priority: high
+  database:
+    description: "Database connectivity and queries"
+    priority: high
+  devops:
+    description: "CI/CD and infrastructure tools"
+    priority: medium
+  testing:
+    description: "Testing and automation tools"
+    priority: medium
+  cloud:
+    description: "Cloud provider integrations"
+    priority: low
+  utility:
+    description: "General utility servers"
+    priority: low
+  core:
+    description: "Core functionality servers"
+    priority: high
+  documentation:
+    description: "Documentation and context servers"
+    priority: medium
+
+# Default MCP configuration template
+settings_template:
+  mcpServers: {}
+  permissions:
+    allow: []
+    deny: []

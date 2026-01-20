@@ -1,0 +1,526 @@
+# Framework Detection Mappings
+# Maps detected frameworks to agent types and configurations
+
+detection_sources:
+  planning_docs:
+    - PRD.md
+    - roadmap.md
+    - brainstorm.md
+    - README.md
+    - PLAN.md
+    - spec.md
+    - requirements.md
+
+  dependency_files:
+    javascript:
+      - package.json
+      - package-lock.json
+      - yarn.lock
+      - pnpm-lock.yaml
+    python:
+      - requirements.txt
+      - pyproject.toml
+      - setup.py
+      - Pipfile
+    rust:
+      - Cargo.toml
+    go:
+      - go.mod
+    ruby:
+      - Gemfile
+    java:
+      - pom.xml
+      - build.gradle
+
+# Framework patterns for detection
+frameworks:
+  frontend:
+    react:
+      patterns:
+        - "react"
+        - "react-dom"
+        - "create-react-app"
+      keywords:
+        - "React"
+        - "JSX"
+        - "useState"
+        - "useEffect"
+      agent: frontend-react
+      model: sonnet
+      color: "#61DAFB"
+
+    nextjs:
+      patterns:
+        - "next"
+        - "next/app"
+        - "next/server"
+      keywords:
+        - "Next.js"
+        - "getServerSideProps"
+        - "getStaticProps"
+        - "App Router"
+        - "Pages Router"
+      agent: frontend-nextjs
+      model: sonnet
+      color: "#000000"
+
+    vue:
+      patterns:
+        - "vue"
+        - "vuex"
+        - "pinia"
+        - "@vue/cli"
+      keywords:
+        - "Vue"
+        - "Vue.js"
+        - "Composition API"
+        - "Options API"
+      agent: frontend-vue
+      model: sonnet
+      color: "#4FC08D"
+
+    svelte:
+      patterns:
+        - "svelte"
+        - "@sveltejs/kit"
+        - "svelte-kit"
+      keywords:
+        - "Svelte"
+        - "SvelteKit"
+      agent: frontend-svelte
+      model: sonnet
+      color: "#FF3E00"
+
+    angular:
+      patterns:
+        - "@angular/core"
+        - "@angular/cli"
+      keywords:
+        - "Angular"
+        - "NgModule"
+      agent: frontend-angular
+      model: sonnet
+      color: "#DD0031"
+
+  backend:
+    fastapi:
+      patterns:
+        - "fastapi"
+        - "uvicorn"
+        - "starlette"
+      keywords:
+        - "FastAPI"
+        - "Pydantic"
+        - "async def"
+      agent: backend-fastapi
+      model: sonnet
+      color: "#009688"
+
+    express:
+      patterns:
+        - "express"
+        - "express-validator"
+        - "helmet"
+      keywords:
+        - "Express"
+        - "Express.js"
+        - "middleware"
+        - "router"
+      agent: backend-express
+      model: sonnet
+      color: "#000000"
+
+    django:
+      patterns:
+        - "django"
+        - "djangorestframework"
+        - "django-cors-headers"
+      keywords:
+        - "Django"
+        - "Django REST"
+        - "ORM"
+        - "migrations"
+      agent: backend-django
+      model: sonnet
+      color: "#092E20"
+
+    nestjs:
+      patterns:
+        - "@nestjs/core"
+        - "@nestjs/common"
+        - "@nestjs/cli"
+      keywords:
+        - "NestJS"
+        - "Nest.js"
+        - "Injectable"
+        - "Controller"
+      agent: backend-nestjs
+      model: sonnet
+      color: "#E0234E"
+
+    flask:
+      patterns:
+        - "flask"
+        - "flask-restful"
+        - "flask-cors"
+      keywords:
+        - "Flask"
+        - "Jinja"
+      agent: backend-flask
+      model: sonnet
+      color: "#000000"
+
+    rails:
+      patterns:
+        - "rails"
+        - "activerecord"
+      keywords:
+        - "Rails"
+        - "Ruby on Rails"
+        - "ActiveRecord"
+      agent: backend-rails
+      model: sonnet
+      color: "#CC0000"
+
+  database:
+    postgres:
+      patterns:
+        - "pg"
+        - "psycopg2"
+        - "asyncpg"
+        - "postgres"
+        - "@prisma/client"
+      keywords:
+        - "PostgreSQL"
+        - "Postgres"
+        - "psql"
+      agent: database-postgres
+      model: sonnet
+      color: "#336791"
+
+    mongodb:
+      patterns:
+        - "mongoose"
+        - "mongodb"
+        - "pymongo"
+        - "motor"
+      keywords:
+        - "MongoDB"
+        - "Mongo"
+        - "NoSQL"
+        - "collections"
+      agent: database-mongodb
+      model: sonnet
+      color: "#47A248"
+
+    supabase:
+      patterns:
+        - "@supabase/supabase-js"
+        - "supabase"
+      keywords:
+        - "Supabase"
+        - "Realtime"
+        - "Row Level Security"
+      agent: database-supabase
+      model: sonnet
+      color: "#3ECF8E"
+
+    mysql:
+      patterns:
+        - "mysql"
+        - "mysql2"
+        - "mysqlclient"
+      keywords:
+        - "MySQL"
+        - "MariaDB"
+      agent: database-mysql
+      model: sonnet
+      color: "#4479A1"
+
+    redis:
+      patterns:
+        - "redis"
+        - "ioredis"
+        - "aioredis"
+      keywords:
+        - "Redis"
+        - "caching"
+        - "pub/sub"
+      agent: database-redis
+      model: haiku
+      color: "#DC382D"
+
+  devops:
+    docker:
+      patterns:
+        - "Dockerfile"
+        - "docker-compose"
+      keywords:
+        - "Docker"
+        - "container"
+        - "Dockerfile"
+        - "docker-compose"
+      agent: devops-docker
+      model: haiku
+      color: "#2496ED"
+
+    kubernetes:
+      patterns:
+        - "kubernetes"
+        - "k8s"
+        - "kubectl"
+      keywords:
+        - "Kubernetes"
+        - "K8s"
+        - "pods"
+        - "deployments"
+      agent: devops-kubernetes
+      model: sonnet
+      color: "#326CE5"
+
+    github_actions:
+      patterns:
+        - ".github/workflows"
+      keywords:
+        - "GitHub Actions"
+        - "CI/CD"
+        - "workflow"
+        - "actions"
+      agent: devops-github-actions
+      model: haiku
+      color: "#2088FF"
+
+    terraform:
+      patterns:
+        - "terraform"
+        - ".tf"
+      keywords:
+        - "Terraform"
+        - "IaC"
+        - "infrastructure"
+      agent: devops-terraform
+      model: sonnet
+      color: "#7B42BC"
+
+    aws:
+      patterns:
+        - "aws-sdk"
+        - "boto3"
+        - "@aws-sdk"
+      keywords:
+        - "AWS"
+        - "Lambda"
+        - "S3"
+        - "EC2"
+      agent: devops-aws
+      model: sonnet
+      color: "#FF9900"
+
+  security:
+    auth:
+      patterns:
+        - "passport"
+        - "jsonwebtoken"
+        - "bcrypt"
+        - "authlib"
+        - "python-jose"
+      keywords:
+        - "authentication"
+        - "OAuth"
+        - "JWT"
+        - "session"
+        - "auth"
+      agent: security-auth
+      model: sonnet
+      color: "#FF5722"
+
+  cloud:
+    aws:
+      patterns:
+        - "aws-sdk"
+        - "boto3"
+        - "@aws-sdk"
+        - "aws-cdk"
+        - "serverless"
+      keywords:
+        - "AWS"
+        - "Lambda"
+        - "S3"
+        - "EC2"
+        - "DynamoDB"
+        - "CloudFormation"
+        - "ECS"
+        - "EKS"
+      agent: cloud-aws
+      model: sonnet
+      color: "#FF9900"
+      template: generic  # Uses generic template
+
+    gcp:
+      patterns:
+        - "@google-cloud"
+        - "google-cloud"
+        - "firebase"
+        - "firebase-admin"
+      keywords:
+        - "GCP"
+        - "Google Cloud"
+        - "Firebase"
+        - "Cloud Run"
+        - "BigQuery"
+      agent: cloud-gcp
+      model: sonnet
+      color: "#4285F4"
+      template: generic
+
+    azure:
+      patterns:
+        - "@azure"
+        - "azure-storage"
+        - "azure-functions"
+      keywords:
+        - "Azure"
+        - "Azure Functions"
+        - "Cosmos DB"
+        - "Azure DevOps"
+      agent: cloud-azure
+      model: sonnet
+      color: "#0078D4"
+      template: generic
+
+  data:
+    databricks:
+      patterns:
+        - "databricks"
+        - "pyspark"
+        - "databricks-sdk"
+      keywords:
+        - "Databricks"
+        - "Spark"
+        - "Delta Lake"
+        - "MLflow"
+      agent: data-databricks
+      model: sonnet
+      color: "#FF3621"
+      template: generic
+
+    snowflake:
+      patterns:
+        - "snowflake-connector"
+        - "snowflake-sqlalchemy"
+      keywords:
+        - "Snowflake"
+        - "data warehouse"
+      agent: data-snowflake
+      model: sonnet
+      color: "#29B5E8"
+      template: generic
+
+    airflow:
+      patterns:
+        - "apache-airflow"
+        - "airflow"
+      keywords:
+        - "Airflow"
+        - "DAG"
+        - "orchestration"
+      agent: data-airflow
+      model: sonnet
+      color: "#017CEE"
+      template: generic
+
+  mobile:
+    react_native:
+      patterns:
+        - "react-native"
+        - "expo"
+      keywords:
+        - "React Native"
+        - "Expo"
+        - "mobile app"
+      agent: mobile-react-native
+      model: sonnet
+      color: "#61DAFB"
+      template: generic
+
+    flutter:
+      patterns:
+        - "flutter"
+      keywords:
+        - "Flutter"
+        - "Dart"
+      agent: mobile-flutter
+      model: sonnet
+      color: "#02569B"
+      template: generic
+
+  ml:
+    pytorch:
+      patterns:
+        - "torch"
+        - "pytorch"
+        - "torchvision"
+      keywords:
+        - "PyTorch"
+        - "deep learning"
+        - "neural network"
+      agent: ml-pytorch
+      model: sonnet
+      color: "#EE4C2C"
+      template: generic
+
+    tensorflow:
+      patterns:
+        - "tensorflow"
+        - "keras"
+        - "tf"
+      keywords:
+        - "TensorFlow"
+        - "Keras"
+        - "machine learning"
+      agent: ml-tensorflow
+      model: sonnet
+      color: "#FF6F00"
+      template: generic
+
+    langchain:
+      patterns:
+        - "langchain"
+        - "llama-index"
+        - "openai"
+      keywords:
+        - "LangChain"
+        - "LLM"
+        - "RAG"
+        - "embeddings"
+      agent: ml-langchain
+      model: sonnet
+      color: "#1C3C3C"
+      template: generic
+
+# Core agents (always generated)
+core_agents:
+  orchestrator:
+    model: opus
+    color: "#9C27B0"
+    description: "Multi-agent coordination and task delegation"
+
+  project-manager:
+    model: sonnet
+    color: "#2196F3"
+    description: "Planning, documentation, and progress tracking"
+
+  qa-engineer:
+    model: haiku
+    color: "#4CAF50"
+    description: "Quality checks & code review"
+
+  troubleshooter:
+    model: sonnet
+    color: "#F44336"
+    description: "Debugging and issue resolution"
+
+  testing-agent:
+    model: haiku
+    color: "#FF9800"
+    description: "Test execution and coverage"

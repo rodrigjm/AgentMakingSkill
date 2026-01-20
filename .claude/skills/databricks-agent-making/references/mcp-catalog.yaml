@@ -1,0 +1,296 @@
+# MCP Server Catalog for Databricks Projects
+# Maps detected Databricks capabilities to MCP server configurations
+
+mcp_servers:
+  # Language Servers
+  python:
+    name: "pyright"
+    command: "npx"
+    args: ["pyright-langserver", "--stdio"]
+    triggers:
+      - python
+      - pyproject.toml
+      - requirements.txt
+      - "*.py"
+    category: language
+
+  # Databricks-Specific Servers
+  databricks:
+    name: "databricks-mcp"
+    command: "npx"
+    args: ["-y", "@databricks/mcp-server"]
+    env:
+      DATABRICKS_HOST: "${DATABRICKS_HOST}"
+      DATABRICKS_TOKEN: "${DATABRICKS_TOKEN}"
+    triggers:
+      - databricks.yml
+      - databricks
+      - pyspark
+    category: databricks
+    description: "Databricks workspace API access"
+
+  # Database Servers
+  spark_sql:
+    name: "spark-sql-mcp"
+    command: "npx"
+    args: ["-y", "@databricks/spark-sql-mcp"]
+    env:
+      DATABRICKS_HOST: "${DATABRICKS_HOST}"
+      DATABRICKS_TOKEN: "${DATABRICKS_TOKEN}"
+      DATABRICKS_WAREHOUSE_ID: "${DATABRICKS_WAREHOUSE_ID}"
+    triggers:
+      - spark.sql
+      - "*.sql"
+      - databricks_sql
+    category: database
+    description: "Databricks SQL query execution"
+
+  delta_lake:
+    name: "delta-lake-mcp"
+    command: "npx"
+    args: ["-y", "@delta/mcp-server"]
+    env:
+      DATABRICKS_HOST: "${DATABRICKS_HOST}"
+      DATABRICKS_TOKEN: "${DATABRICKS_TOKEN}"
+    triggers:
+      - delta
+      - DeltaTable
+    category: database
+    description: "Delta Lake table operations"
+
+  unity_catalog:
+    name: "unity-catalog-mcp"
+    command: "npx"
+    args: ["-y", "@databricks/unity-catalog-mcp"]
+    env:
+      DATABRICKS_HOST: "${DATABRICKS_HOST}"
+      DATABRICKS_TOKEN: "${DATABRICKS_TOKEN}"
+    triggers:
+      - unity_catalog
+      - catalog
+      - schema
+    category: governance
+    description: "Unity Catalog metadata and governance"
+
+  # ML Servers
+  mlflow:
+    name: "mlflow-mcp"
+    command: "npx"
+    args: ["-y", "@mlflow/mcp-server"]
+    env:
+      MLFLOW_TRACKING_URI: "${MLFLOW_TRACKING_URI}"
+      DATABRICKS_HOST: "${DATABRICKS_HOST}"
+      DATABRICKS_TOKEN: "${DATABRICKS_TOKEN}"
+    triggers:
+      - mlflow
+      - experiment
+      - model_registry
+    category: ml
+    description: "MLflow experiment tracking and model registry"
+
+  feature_store:
+    name: "feature-store-mcp"
+    command: "npx"
+    args: ["-y", "@databricks/feature-store-mcp"]
+    env:
+      DATABRICKS_HOST: "${DATABRICKS_HOST}"
+      DATABRICKS_TOKEN: "${DATABRICKS_TOKEN}"
+    triggers:
+      - feature_store
+      - FeatureStoreClient
+    category: ml
+    description: "Feature Store operations"
+
+  # Development Tools
+  github:
+    name: "@modelcontextprotocol/server-github"
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-github"]
+    env:
+      GITHUB_PERSONAL_ACCESS_TOKEN: "${GITHUB_TOKEN}"
+    triggers:
+      - .github
+      - github
+    category: devops
+
+  # Streaming Servers
+  kafka:
+    name: "kafka-mcp"
+    command: "npx"
+    args: ["-y", "@apache/kafka-mcp"]
+    env:
+      KAFKA_BOOTSTRAP_SERVERS: "${KAFKA_BOOTSTRAP_SERVERS}"
+    triggers:
+      - kafka
+      - readStream
+      - writeStream
+    category: streaming
+    description: "Apache Kafka operations"
+
+  # File System & Search
+  filesystem:
+    name: "@modelcontextprotocol/server-filesystem"
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-filesystem", "${PROJECT_ROOT}"]
+    triggers: []
+    category: core
+    always_include: true
+
+  # Context & Documentation
+  context7:
+    name: "context7"
+    command: "npx"
+    args: ["-y", "@context7/mcp-server"]
+    triggers: []
+    category: documentation
+    always_include: true
+
+  # Web Fetching
+  fetch:
+    name: "@modelcontextprotocol/server-fetch"
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-fetch"]
+    triggers: []
+    category: utility
+    always_include: true
+
+  # Browser for documentation scraping
+  playwright:
+    name: "playwright-mcp"
+    command: "npx"
+    args: ["-y", "@anthropic/mcp-server-playwright"]
+    triggers:
+      - playwright
+    category: testing
+
+  # Cloud Providers (for data sources)
+  aws:
+    name: "aws-mcp"
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-aws"]
+    env:
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      AWS_REGION: "${AWS_REGION}"
+    triggers:
+      - aws
+      - s3
+      - boto3
+    category: cloud
+    description: "AWS services (S3, etc.) for data sources"
+
+  azure:
+    name: "azure-mcp"
+    command: "npx"
+    args: ["-y", "@azure/mcp-server"]
+    env:
+      AZURE_SUBSCRIPTION_ID: "${AZURE_SUBSCRIPTION_ID}"
+      AZURE_TENANT_ID: "${AZURE_TENANT_ID}"
+    triggers:
+      - azure
+      - adls
+      - wasbs
+    category: cloud
+    description: "Azure services (ADLS, etc.) for data sources"
+
+  gcp:
+    name: "gcp-mcp"
+    command: "npx"
+    args: ["-y", "@google-cloud/mcp-server"]
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS: "${GOOGLE_APPLICATION_CREDENTIALS}"
+    triggers:
+      - gcp
+      - gcs
+      - bigquery
+    category: cloud
+    description: "GCP services (GCS, BigQuery) for data sources"
+
+# Server categories for grouping
+categories:
+  language:
+    description: "Language servers for code intelligence"
+    priority: high
+
+  databricks:
+    description: "Databricks platform connectivity"
+    priority: high
+
+  database:
+    description: "Database and query execution"
+    priority: high
+
+  governance:
+    description: "Data governance and cataloging"
+    priority: high
+
+  ml:
+    description: "Machine learning tools"
+    priority: medium
+
+  streaming:
+    description: "Streaming data tools"
+    priority: medium
+
+  devops:
+    description: "CI/CD and infrastructure tools"
+    priority: medium
+
+  cloud:
+    description: "Cloud provider integrations"
+    priority: low
+
+  testing:
+    description: "Testing and automation tools"
+    priority: medium
+
+  utility:
+    description: "General utility servers"
+    priority: low
+
+  core:
+    description: "Core functionality servers"
+    priority: high
+
+  documentation:
+    description: "Documentation and context servers"
+    priority: medium
+
+# Default MCP configuration template for Databricks projects
+settings_template:
+  mcpServers: {}
+  permissions:
+    allow: []
+    deny: []
+  env_vars:
+    required:
+      - DATABRICKS_HOST
+      - DATABRICKS_TOKEN
+    optional:
+      - DATABRICKS_WAREHOUSE_ID
+      - MLFLOW_TRACKING_URI
+      - KAFKA_BOOTSTRAP_SERVERS
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+
+# Environment variable documentation
+env_documentation:
+  DATABRICKS_HOST:
+    description: "Databricks workspace URL (e.g., https://adb-xxx.azuredatabricks.net)"
+    required: true
+
+  DATABRICKS_TOKEN:
+    description: "Databricks personal access token or service principal token"
+    required: true
+
+  DATABRICKS_WAREHOUSE_ID:
+    description: "SQL warehouse ID for Databricks SQL queries"
+    required: false
+
+  MLFLOW_TRACKING_URI:
+    description: "MLflow tracking server URI (defaults to Databricks workspace)"
+    required: false
+
+  KAFKA_BOOTSTRAP_SERVERS:
+    description: "Kafka bootstrap servers for streaming"
+    required: false
