@@ -6,7 +6,7 @@ description: |
   to detect the technology stack and create appropriate domain agents alongside core helper agents.
 
   Outputs:
-  - Specialized domain agents (frontend, backend, database, devops)
+  - Specialized domain agents (frontend, backend, database, devops, ux)
   - Core helper agents (orchestrator, project-manager, qa-engineer, troubleshooter, testing-agent)
   - Coordination files (CONTRACT.md, STATUS.md)
   - MCP server configuration (settings.json)
@@ -112,6 +112,17 @@ Use these detection patterns from `references/framework-mappings.yaml`:
 **DevOps Detection:**
 - `Dockerfile` present → Docker agent
 - `.github/workflows/` present → GitHub Actions agent
+
+**UX Detection (triggers framework-specific UX agent):**
+- `tailwindcss`, `@chakra-ui`, `@mui/material`, `styled-components` → UX agent
+- UX agent pairs with detected frontend framework (e.g., React → ux-react)
+
+**Application Intent Detection (determines UX specialization):**
+- `recharts`, `d3`, `chart.js`, `ag-grid` → Data Analysis intent
+- `react-hook-form`, `formik`, `@dnd-kit` → User Interaction intent
+- `next-mdx-remote`, `contentlayer`, `prismjs` → Informational intent
+- `stripe`, `@shopify/hydrogen`, `snipcart` → E-commerce intent
+- `socket.io`, `liveblocks`, `yjs` → Real-time Collaborative intent
 
 ### Step 3: Merge Strategy
 
@@ -431,6 +442,7 @@ Generate agents in this order:
    - `backend-{framework}.md` - For detected backend framework
    - `database-{type}.md` - For detected database
    - `devops-{tool}.md` - For detected DevOps tools
+   - `ux-{framework}.md` - For UX/User Experience (pairs with frontend framework)
 
 ### Step 5: Coordination File Generation
 
@@ -462,6 +474,10 @@ Before writing files, present a summary:
 - Database: PostgreSQL (from requirements.txt)
 - DevOps: Docker, GitHub Actions
 
+## Application Intent
+- Primary: Data Analysis (detected: recharts, ag-grid)
+- Secondary: User Interaction (detected: react-hook-form)
+
 ## Agents to Generate
 ### Core (5)
 - orchestrator (opus)
@@ -470,11 +486,12 @@ Before writing files, present a summary:
 - troubleshooter (sonnet)
 - testing-agent (haiku)
 
-### Domain (4)
+### Domain (5)
 - frontend-react (sonnet)
 - backend-fastapi (sonnet)
 - database-postgres (sonnet)
 - devops-docker (haiku)
+- ux-react (sonnet) - Data Analysis focus
 
 Proceed with generation? [Yes/No/Customize]
 ```
@@ -492,7 +509,8 @@ Proceed with generation? [Yes/No/Customize]
 │   ├── frontend-{framework}.md
 │   ├── backend-{framework}.md
 │   ├── database-{type}.md
-│   └── devops-{tool}.md
+│   ├── devops-{tool}.md
+│   └── ux-{framework}.md
 ├── CONTRACT.md
 ├── STATUS.md
 ├── settings.json
@@ -507,6 +525,12 @@ Load templates from `templates/` directory and substitute variables:
 - `{{OWNED_PATHS}}` - Calculated file ownership patterns
 - `{{MODEL}}` - Assigned model (opus/sonnet/haiku)
 - `{{COLOR}}` - Agent color code
+- `{{APPLICATION_INTENT}}` - Detected application type (data_analysis, user_interaction, informational, ecommerce, realtime_collaborative)
+- `{{INTENT_DATA_ANALYSIS}}` - Boolean, true if data visualization patterns detected
+- `{{INTENT_USER_INTERACTION}}` - Boolean, true if form/workflow patterns detected
+- `{{INTENT_INFORMATIONAL}}` - Boolean, true if content/documentation patterns detected
+- `{{INTENT_ECOMMERCE}}` - Boolean, true if e-commerce patterns detected
+- `{{INTENT_REALTIME}}` - Boolean, true if real-time collaboration patterns detected
 
 ## Regeneration Mode
 
@@ -601,6 +625,13 @@ After successful generation, return:
 |-------|-------|---------------|
 | frontend-react | sonnet | package.json |
 | backend-fastapi | sonnet | requirements.txt |
+| ux-react | sonnet | tailwindcss, recharts |
+
+### Application Intent
+| Intent | Confidence | Key Indicators |
+|--------|------------|----------------|
+| Data Analysis | High | recharts, ag-grid, dashboard keywords |
+| User Interaction | Medium | react-hook-form |
 
 ### Coordination Files
 - CONTRACT.md - Agent ownership boundaries
@@ -611,6 +642,7 @@ After successful generation, return:
 1. Review CONTRACT.md for ownership boundaries
 2. Add API keys to settings.json environment variables
 3. Run `/orchestrator` to begin coordinated development
+4. Use `/ux-react` for layout design before frontend implementation
 ```
 
 ---
@@ -675,6 +707,98 @@ After successful generation, return:
 
 ---
 
+## Application Intent Detection
+
+The UX agent adapts its guidance based on the detected application intent. Intent is determined by analyzing dependencies and project keywords.
+
+### Intent Detection Logic
+
+```javascript
+// Check dependencies for intent patterns
+const intents = {
+  data_analysis: false,
+  user_interaction: false,
+  informational: false,
+  ecommerce: false,
+  realtime_collaborative: false
+};
+
+// Data Analysis indicators
+const dataAnalysisPatterns = [
+  'recharts', 'chart.js', 'd3', 'plotly', 'visx', '@nivo',
+  'victory', 'echarts', 'highcharts', 'ag-grid', '@tanstack/react-table'
+];
+if (deps.some(d => dataAnalysisPatterns.includes(d))) {
+  intents.data_analysis = true;
+}
+
+// User Interaction indicators
+const userInteractionPatterns = [
+  'react-hook-form', 'formik', 'yup', 'zod', '@dnd-kit',
+  'react-beautiful-dnd', 'react-select', '@tanstack/react-query', 'swr'
+];
+if (deps.some(d => userInteractionPatterns.includes(d))) {
+  intents.user_interaction = true;
+}
+
+// Informational/Content indicators
+const informationalPatterns = [
+  'next-mdx-remote', '@mdx-js', 'contentlayer', 'prismjs',
+  'shiki', 'next-seo', 'react-markdown'
+];
+if (deps.some(d => informationalPatterns.includes(d))) {
+  intents.informational = true;
+}
+
+// E-commerce indicators
+const ecommercePatterns = [
+  'stripe', '@stripe/stripe-js', 'shopify', '@shopify/hydrogen',
+  'snipcart', 'medusa'
+];
+if (deps.some(d => ecommercePatterns.includes(d))) {
+  intents.ecommerce = true;
+}
+
+// Real-time Collaborative indicators
+const realtimePatterns = [
+  'socket.io', 'pusher', 'ably', 'liveblocks',
+  'yjs', 'automerge', '@tiptap'
+];
+if (deps.some(d => realtimePatterns.includes(d))) {
+  intents.realtime_collaborative = true;
+}
+
+// Also check planning docs for keywords
+const planningKeywords = {
+  data_analysis: ['dashboard', 'analytics', 'metrics', 'charts', 'reporting'],
+  user_interaction: ['wizard', 'workflow', 'form', 'CRUD', 'editor'],
+  informational: ['blog', 'documentation', 'content', 'landing page'],
+  ecommerce: ['shopping cart', 'checkout', 'product catalog', 'store'],
+  realtime_collaborative: ['real-time', 'collaboration', 'multiplayer', 'chat']
+};
+```
+
+### Intent-to-Template Mapping
+
+When generating the UX agent, inject the appropriate intent sections:
+
+| Intent | Template Variable | Effect |
+|--------|------------------|--------|
+| data_analysis | `{{INTENT_DATA_ANALYSIS}}` | Injects dashboard layout patterns |
+| user_interaction | `{{INTENT_USER_INTERACTION}}` | Injects form/workflow patterns |
+| informational | `{{INTENT_INFORMATIONAL}}` | Injects content layout patterns |
+| ecommerce | `{{INTENT_ECOMMERCE}}` | Injects e-commerce layout patterns |
+| realtime_collaborative | `{{INTENT_REALTIME}}` | Injects real-time UI patterns |
+
+### Multiple Intents
+
+An application can have multiple intents. When multiple are detected:
+1. Include all relevant sections in the UX agent
+2. Set primary intent based on strongest signal (most dependencies matched)
+3. Display all detected intents in confirmation summary
+
+---
+
 ## Template Processing
 
 ### Variable Substitution
@@ -720,9 +844,15 @@ templates/
 │   │   ├── postgres.template.md
 │   │   ├── mongodb.template.md
 │   │   └── supabase.template.md
-│   └── devops/
-│       ├── docker.template.md
-│       └── github-actions.template.md
+│   ├── devops/
+│   │   ├── docker.template.md
+│   │   └── github-actions.template.md
+│   └── ux/
+│       ├── generic.template.md    # Base UX template
+│       ├── react.template.md      # React-specific UX patterns
+│       ├── nextjs.template.md     # Next.js-specific UX patterns
+│       ├── vue.template.md        # Vue-specific UX patterns
+│       └── svelte.template.md     # Svelte-specific UX patterns
 └── coordination/
     ├── CONTRACT.template.md
     ├── STATUS.template.md
@@ -841,6 +971,7 @@ Execute in this order to ensure dependencies are met:
    - backend-{framework}.md
    - database-{type}.md
    - devops-{tools}.md
+   - ux-{framework}.md (with application intent injected)
 
 4. **Generate coordination files** (needs agent list):
    - CONTRACT.md (needs agent roster)

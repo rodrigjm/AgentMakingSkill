@@ -498,6 +498,170 @@ frameworks:
       color: "#1C3C3C"
       template: generic
 
+  # UX/User Experience agents - bespoke per frontend framework
+  ux:
+    # Generic UX detection (triggers framework-specific agent)
+    generic:
+      patterns:
+        - "tailwindcss"
+        - "@tailwindcss"
+        - "@emotion"
+        - "styled-components"
+        - "@chakra-ui"
+        - "@mui/material"
+        - "@radix-ui"
+        - "@headlessui"
+        - "framer-motion"
+        - "lucide-react"
+        - "@heroicons"
+        - "sass"
+        - "less"
+      keywords:
+        - "UI/UX"
+        - "user experience"
+        - "design system"
+        - "accessibility"
+        - "responsive"
+        - "mobile-first"
+      agent: ux-generic
+      model: sonnet
+      color: "#E91E63"
+      requires_frontend: true  # Must pair with detected frontend framework
+
+    # Application intent patterns (determines UX specialization)
+    intent_patterns:
+      data_analysis:
+        patterns:
+          - "recharts"
+          - "chart.js"
+          - "d3"
+          - "plotly"
+          - "visx"
+          - "@nivo"
+          - "victory"
+          - "echarts"
+          - "highcharts"
+          - "ag-grid"
+          - "@tanstack/react-table"
+        keywords:
+          - "dashboard"
+          - "analytics"
+          - "data visualization"
+          - "charts"
+          - "graphs"
+          - "metrics"
+          - "reporting"
+          - "KPIs"
+        focus: layout_data_visualization
+
+      user_interaction:
+        patterns:
+          - "react-hook-form"
+          - "formik"
+          - "yup"
+          - "zod"
+          - "@dnd-kit"
+          - "react-beautiful-dnd"
+          - "react-select"
+          - "@tanstack/react-query"
+          - "swr"
+        keywords:
+          - "workflow"
+          - "form"
+          - "wizard"
+          - "interactive"
+          - "drag and drop"
+          - "CRUD"
+          - "editor"
+          - "builder"
+        focus: layout_user_interaction
+
+      informational:
+        patterns:
+          - "next-mdx-remote"
+          - "@mdx-js"
+          - "contentlayer"
+          - "prismjs"
+          - "shiki"
+          - "next-seo"
+          - "react-markdown"
+        keywords:
+          - "blog"
+          - "documentation"
+          - "content"
+          - "landing page"
+          - "marketing"
+          - "portfolio"
+          - "informational"
+          - "static"
+        focus: layout_informational
+
+      ecommerce:
+        patterns:
+          - "stripe"
+          - "@stripe/stripe-js"
+          - "shopify"
+          - "@shopify/hydrogen"
+          - "snipcart"
+          - "medusa"
+        keywords:
+          - "ecommerce"
+          - "shopping cart"
+          - "checkout"
+          - "product catalog"
+          - "store"
+          - "payments"
+        focus: layout_ecommerce
+
+      realtime_collaborative:
+        patterns:
+          - "socket.io"
+          - "pusher"
+          - "ably"
+          - "liveblocks"
+          - "yjs"
+          - "automerge"
+          - "@tiptap"
+        keywords:
+          - "real-time"
+          - "collaboration"
+          - "multiplayer"
+          - "live"
+          - "chat"
+          - "notifications"
+        focus: layout_realtime
+
+    # Framework-specific UX agents
+    react:
+      inherits: generic
+      agent: ux-react
+      color: "#E91E63"
+      paired_with: frontend-react
+
+    nextjs:
+      inherits: generic
+      agent: ux-nextjs
+      color: "#E91E63"
+      paired_with: frontend-nextjs
+
+    vue:
+      inherits: generic
+      agent: ux-vue
+      color: "#E91E63"
+      paired_with: frontend-vue
+
+    svelte:
+      inherits: generic
+      agent: ux-svelte
+      color: "#E91E63"
+      paired_with: frontend-svelte
+
+    angular:
+      inherits: generic
+      agent: ux-angular
+      color: "#E91E63"
+      paired_with: frontend-angular
+
 # Core agents (always generated)
 core_agents:
   orchestrator:
